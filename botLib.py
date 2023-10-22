@@ -1,6 +1,9 @@
 import discord
 import time
 
+weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
 def makePingable(user) -> str:
     ID = user.id
     return f"<@{ID}>"

@@ -4,13 +4,15 @@ import botLib
 import json
 import numpy as np
 import json
+import notifications as nt
+import asyncio
 
 
 # Send messages
 async def send_message(message, user_message, botInst, is_private = False):
     try:
         guild = message.guild
-        response = responses.handle_response(user_message, botInst, guild, message.author)
+        response = ">>> " + responses.handle_response(user_message, botInst, guild, message.author)
         if str(response) != "None" and str(response) != "":
             await message.author.send(response) if is_private else await message.channel.send(response)
 
@@ -42,6 +44,8 @@ class botInstance:
         async def on_ready():
             print(f'{self.client.user} is now running!')
             print(self.settings["prefix"] + " is the current prefix.")
+            await nt.handleNotifications(self)
+            
 
         @self.client.event
         async def on_message(message):
@@ -56,7 +60,8 @@ class botInstance:
             ID = message.author.id
 
             await send_message(message, user_message, self)
-
+            
+        
         self.client.run(TOKEN)
 
     def savePractices(self):

@@ -1,6 +1,5 @@
 import botLib
 
-weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 def getHelp(prefix):
     return {
@@ -9,7 +8,10 @@ def getHelp(prefix):
     "practice" : f"Used in combination to a second command.\nCreate a team with: `{prefix}practice create <weekday> <CET/CEST time in 24h format> <team name>`\nDelete a team with `{prefix}practice delete <practice ID>`",
     "practices": f"Gives all practice sessions on schedule and their index ID.\n`{prefix}practices <(team)>`",
     "team" : f"Used in combination to a second command or gets the info about a team.\nGet team information: `{prefix}team <team>`\nCreate a team: `{prefix}team create <team name> <text channel for reminders> <voice channel>`\nDelete a team: `{prefix}team delete <team>`\nAdd a member to the team: `{prefix}team addmember <team> <user>`\nRemove a member from a team: `{prefix}team removemember <team> <user>`\nAdd a role which will be pinged as reminders to the team: `{prefix}team addrole <team> <role>`\nRemove a role from a team: `{prefix}team removerole <team> <role>`",
-    "teams" : f"Gives a list of all teams.\n`{prefix}teams`"
+    "teams" : f"Gives a list of all teams.\n`{prefix}teams`",
+    "permission": f"Gives or removes the permission to edit teams to a role. \n`{prefix}permission <add/remove> <role>`",
+    "source": f"Gives the link to the bot's [source code](<https://github.com/Theuntextured/Angleskar-Practice-Discord-Bot/tree/main>).\n`{prefix}source`",
+    "roadmap": f"Gives a list of the current [roadmap](<https://trello.com/b/wbeZTFMR/practice-bot>).\n`{prefix}roadmap`"
     }
 
 def handle_response(p_message, botInst, guild, sender) -> str:
@@ -35,10 +37,10 @@ def handle_response(p_message, botInst, guild, sender) -> str:
     #help command
     if message[0] == 'help':
         help = getHelp(prefix)
-        s = "**-----------------------------------------**\n**Here is a list of all available commands:**\n\n\n"
+        s = "# __Here is a list of all available commands:__\n\n"
         if len(message) == 1:
             for i in help.keys():
-                s += f"**{prefix}{i}**\n{help[i]}\n\n"
+                s += f"## {prefix}{i}\n{help[i]}\n\n"
             return s
         else:
             cmd = message[1].lower()
@@ -75,8 +77,13 @@ def handle_response(p_message, botInst, guild, sender) -> str:
             botInst.settings["teamPermRoles"].remove(roleID)
             botInst.saveSettings()
             return f"{message[len(message) - 1]} now has been revoked of team command permissions."
-            
-
+    
+    #source and roadmap
+    if message[0] == "source":
+        return "[Here](https://github.com/Theuntextured/Angleskar-Practice-Discord-Bot/tree/main) you can find the source code for the bot."
+    if message[0] == "roadmap":
+        return "[Here](https://trello.com/b/wbeZTFMR/practice-bot) you can find the roadmap for the bot's development."
+    
     #practice commands
     if message[0] == "practice":
 
@@ -90,7 +97,7 @@ def handle_response(p_message, botInst, guild, sender) -> str:
         if message[1] == "create":
             if len(message) < 5:
                 return f"Incorrect format. use `{prefix}help createpractice` to view the correct format."
-            if weekdays.count(message[2].capitalize()) == 0:
+            if botLib.weekdays.count(message[2].capitalize()) == 0:
                 return f'"{message[2]}" is not a valid week day.'
 
             team = botLib.combineToString(message[4:]).lower()
@@ -100,7 +107,7 @@ def handle_response(p_message, botInst, guild, sender) -> str:
             if not botLib.isTimeFormat(message[3]):
                 return f"\"{message[3]}\" is not a valid time format."
             
-            newPractice = {"weekday" : message[2].capitalize(), "time" : message[3], "team" : team, "dayReminder" : False, "hourReminder" : False, "minuteReminder" : False}
+            newPractice = {"weekday" : message[2].capitalize(), "time" : message[3], "team" : team}
             botInst.practices.append(newPractice)
             botInst.savePractices()
             return f'Added a practice session which will occur every {newPractice["weekday"]} at {newPractice["time"]} CET for the team {newPractice["team"].title()}.'
