@@ -24,7 +24,7 @@ async def send_message(message, user_message, botInst, is_private = False):
 class botInstance:
     def __init__(self):
         try:
-            f = open("token.txt", "r")
+            f = open("resources\\token.txt", "r")
             TOKEN = f.read()
             f.close()
         except Exception as e:
@@ -65,47 +65,47 @@ class botInstance:
         self.client.run(TOKEN)
 
     def savePractices(self):
-        with open("practices.json", "w") as f:
+        with open("resources\\practices.json", "w") as f:
             json.dump(self.practices, f)
 
     def saveUsers(self):
-        with open("users.json", "w") as f:
+        with open("resources\\users.json", "w") as f:
             json.dump(self.users, f)
 
     def saveSettings(self):
-        with open("settings.json", "w") as f:
+        with open("resources\\settings.json", "w") as f:
             json.dump(self.settings, f)
 
     def saveTeams(self):
-        with open("teams.json", "w") as f:
+        with open("resources\\teams.json", "w") as f:
             json.dump(self.teams, f)
 
     def load(self):
 
         #load practices
         try:
-            f = open("practices.json", "r")
+            f = open("resources\\practices.json", "r")
             self.practices = json.load(f)
         except Exception as e:
             print(e)
 
         #load users
         try:
-            f = open("users.json", "r")
+            f = open("resources\\users.json", "r")
             self.users = json.load(f)
         except Exception as e:
             print(e)
 
         #load settings
         try:
-            f = open("settings.json", "r")
+            f = open("resources\\settings.json", "r")
             self.settings = json.load(f)
         except Exception as e:
             print(e)
 
         #load teams
         try:
-            f = open("teams.json", "r")
+            f = open("resources\\teams.json", "r")
             self.teams = json.load(f)
         except Exception as e:
             print(e)
