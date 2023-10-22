@@ -82,6 +82,9 @@ target/
 profile_default/
 ipython_config.py
 
+#resources
+resources/
+
 # TOKEN FILE
 token.txt
 
