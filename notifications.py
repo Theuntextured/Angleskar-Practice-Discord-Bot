@@ -1,10 +1,9 @@
-import discord
 import asyncio
-import bot
 import datetime
 import botLib
-import discord_timestamps as dt
+import arrow
 
+#b
 b = 0
 
 def getWeekday(t):
@@ -34,13 +33,14 @@ async def handleNotifications(self):
                 pings = ""
                 for i in team["roles"]:
                     pings += f"<@&{i}> "
-                text = f"{pings} Remember about practice ! Join {vc} in 30 minutes!"
+                vc = f"<#{team['vc']}>"
+                text = f"{pings} Remember about practice ! Join {vc} <t:{arrow.get(datetime.datetime.utcnow()).int_timestamp + 30 * 60}:R>"
                 await self.client.get_channel(int(self.teams[p["team"]]['tc'])).send(text)
             elif (n.weekday() + 8) % 7 * 24 * 60 + int(n.hour) * 60 + int(n.minute)  == target:
                 pings = ""
                 for i in team["roles"]:
                     pings += f"<@&{i}> "
-                text = f"{pings} Remember about practice tomorrow at {p['time']} CET! React to this message if you can be there!"
+                text = f"{pings} Remember about practice <t:{arrow.get(datetime.datetime.utcnow()).int_timestamp + 24 *60 * 60}:R> at <t:{arrow.get(datetime.datetime.utcnow()).int_timestamp + 24 *60 * 60}:t>! React to this message if you can be there!"
                 await self.client.get_channel(int(self.teams[p["team"]]['tc'])).send(text)
 
         await asyncio.sleep(60)

@@ -12,8 +12,9 @@ import asyncio
 async def send_message(message, user_message, botInst, is_private = False):
     try:
         guild = message.guild
-        response = ">>> " + responses.handle_response(user_message, botInst, guild, message.author)
+        response = responses.handle_response(user_message, botInst, guild, message.author)
         if str(response) != "None" and str(response) != "":
+            response = ">>> " + response
             await message.author.send(response) if is_private else await message.channel.send(response)
 
     except Exception as e:

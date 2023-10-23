@@ -17,6 +17,8 @@ def getHelp(prefix):
 def handle_response(p_message, botInst, guild, sender) -> str:
 
     #setup and check prefix
+    if(len(p_message) == 0):
+        return
     message = p_message.split()
     message[0] = message[0].lower()
     prefix = botInst.settings["prefix"]
@@ -198,11 +200,11 @@ def handle_response(p_message, botInst, guild, sender) -> str:
                 return f'"{team}" is not a valid team.'
 
             if ID in botInst.teams[team]["players"]:
-                return f"{message[len(message) - 1]} is already a member of {team}."
+                return f"{message[len(message) - 1]} is already a member of {team.title()}."
 
             botInst.teams[team]["players"].append(ID)
             botInst.saveTeams()
-            return f"<@{ID}> is now a member of {team}."
+            return f"<@{ID}> is now a member of {team.title()}."
         
         #create team
         if message[1].lower() == "create":
@@ -269,7 +271,7 @@ def handle_response(p_message, botInst, guild, sender) -> str:
             
             botInst.teams[name]["roles"].append(roleID)
             botInst.saveTeams()
-            return f"The role <@&{roleID}> was successfully added to {name.capitalize()}."
+            return f"The role <@&{roleID}> was successfully added to {name.title()}."
 
         if message[1].lower() == "removerole":
 
